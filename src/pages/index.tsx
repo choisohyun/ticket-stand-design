@@ -3,6 +3,7 @@ import Head from "next/head";
 
 export default function Home() {
   const [selectedImage, setSelectedImage] = useState("");
+  const [color, setColor] = useState("#000c");
 
   const uploadImage: ChangeEventHandler<HTMLInputElement> = (e) => {
     e.preventDefault();
@@ -14,6 +15,10 @@ export default function Home() {
     setSelectedImage(URL.createObjectURL(img));
   };
 
+  const changeColor: ChangeEventHandler<HTMLInputElement> = (e) => {
+    setColor(e.target.value);
+  };
+
   return (
     <>
       <Head>
@@ -23,23 +28,40 @@ export default function Home() {
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center">
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
-          <h1 className="text-2xl font-extrabold tracking-tight sm:text-[4rem]">
+          <h1 className="h-16 text-2xl font-extrabold tracking-tight sm:text-[4rem]">
             티켓꽂이 도안 생성기
           </h1>
+          {/*티켓 넣는 곳 색상 선택*/}
+          <div className="flex items-center">
+            <input
+              type="color"
+              value={color}
+              onChange={changeColor}
+              id="color_picker"
+            />
+            <label htmlFor="color_picker">
+              ⬅️ 티켓꽂이 배경 색상 선택: {color}
+            </label>
+          </div>
           <div className="flex h-[600px] w-[900px] flex-col p-4">
             {/*티켓*/}
             <div className="fles-row flex h-[calc(100%*8/10.2)] w-full hover:bg-black/20">
               {/*티켓 넣는 곳*/}
-              <div className="flex h-full w-3/5 items-center justify-center bg-black/80">
-                <div className="h-4/5 w-4/5 bg-black/40 [clip-path:polygon(15%_0%,100%_0,100%_82%,_85%_100%,0_100%,0%_18%)]"></div>
+              <div
+                className="flex h-full w-[calc(100%*11/15.2)] items-center justify-center"
+                style={{ backgroundColor: color }}
+              >
+                <div className="h-[calc(100%*6/8)] w-[calc(100%*10.5/11)] bg-black/40 [clip-path:polygon(10%_0%,100%_0,100%_82%,_90%_100%,0_100%,0%_18%)]"></div>
               </div>
               {/* 사진 넣는 곳 */}
-              <div className="flex h-full w-2/5 cursor-pointer items-center justify-center">
+              <div className="flex h-full w-[calc(100%*4.2/15.2)] cursor-pointer items-center justify-center">
                 <input
                   type="file"
                   accept="image/jpg,impge/png,image/jpeg"
                   name="ticket_image"
                   onChange={uploadImage}
+                  className="invisible w-0"
+                  id="ticket_image"
                 />
                 {selectedImage !== "" ? (
                   <img
@@ -48,18 +70,35 @@ export default function Home() {
                     className="h-full object-cover"
                   />
                 ) : (
-                  <button>클릭하여 사진 업로드</button>
+                  <button>
+                    <label htmlFor="ticket_image" className="cursor-pointer">
+                      클릭하여 사진 업로드
+                    </label>
+                  </button>
                 )}
               </div>
             </div>
             {/*자르는 곳*/}
-            <div className="h-[calc(100%*2.2/10.2)] w-full bg-black/100"></div>
+            <div className="flex h-[calc(100%*2.2/10.2)] w-full items-center justify-center bg-black/100 text-xl text-white">
+              자르는 곳
+            </div>
           </div>
-          <p className="text-xl">
-            기본 이미지 업로드 후 티켓 절취선에 맞는 색상을 선택합니다.
-          </p>
-          <button className="bg-mint/50 rounded-lg">
-            티켓꽂이 이미지 (png) 다운로드받기
+          <ul className="list-disc text-lg">
+            <li>기본 이미지 업로드 후 티켓 절취선에 맞는 색상을 선택합니다.</li>
+            <li>
+              아이코닉 티켓꽂이와 YES24/인터파크/멜론티켓 기본 티켓
+              사이즈(10.5cm * 6cm)를 기준으로 합니다.
+            </li>
+          </ul>
+          <button className="inline-flex items-center rounded bg-cyan-500 px-4 py-2 font-bold text-white">
+            <svg
+              className="mr-2 h-4 w-4 fill-current"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+            >
+              <path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z" />
+            </svg>
+            <span>티켓꽂이 이미지 (png) 다운로드받기</span>
           </button>
         </div>
       </main>
