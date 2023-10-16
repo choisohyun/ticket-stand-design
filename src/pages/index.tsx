@@ -1,5 +1,6 @@
-import { type ChangeEventHandler, useState } from "react";
+import { type ChangeEventHandler, MouseEventHandler, useState } from "react";
 import Head from "next/head";
+import html2canvas from "html2canvas";
 
 export default function Home() {
   const [selectedImage, setSelectedImage] = useState("");
@@ -17,6 +18,28 @@ export default function Home() {
 
   const changeColor: ChangeEventHandler<HTMLInputElement> = (e) => {
     setColor(e.target.value);
+  };
+
+  const downloadImage: MouseEventHandler<HTMLButtonElement> = () => {
+    const saveImg = (uri: string, filename: string) => {
+      const link = document.createElement("a");
+
+      document.body.appendChild(link);
+
+      link.href = uri;
+      link.download = filename;
+      link.click();
+
+      document.body.removeChild(link);
+    };
+
+    const ticketStand = document.getElementById("ticket-stand");
+    void (
+      ticketStand &&
+      html2canvas(ticketStand).then((canvas) => {
+        saveImg(canvas.toDataURL("image/png"), "티켓꽂이.png");
+      })
+    );
   };
 
   return (
@@ -43,7 +66,10 @@ export default function Home() {
               ⬅️ 티켓꽂이 배경 색상 선택: {color}
             </label>
           </div>
-          <div className="flex h-[600px] w-[900px] flex-col p-4">
+          <div
+            className="flex h-[600px] w-[900px] flex-col p-4"
+            id="ticket-stand"
+          >
             {/*티켓*/}
             <div className="fles-row flex h-[calc(100%*8/10.2)] w-full hover:bg-black/20">
               {/*티켓 넣는 곳*/}
@@ -90,7 +116,10 @@ export default function Home() {
               사이즈(10.5cm * 6cm)를 기준으로 합니다.
             </li>
           </ul>
-          <button className="inline-flex items-center rounded bg-cyan-500 px-4 py-2 font-bold text-white">
+          <button
+            className="inline-flex items-center rounded bg-cyan-500 px-4 py-2 font-bold text-white"
+            onClick={downloadImage}
+          >
             <svg
               className="mr-2 h-4 w-4 fill-current"
               xmlns="http://www.w3.org/2000/svg"
