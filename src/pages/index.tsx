@@ -80,21 +80,25 @@ export default function Home() {
                 <div className="h-[calc(100%*6/8)] w-[calc(100%*10.5/11)] bg-black/40 [clip-path:polygon(10%_0%,100%_0,100%_82%,_90%_100%,0_100%,0%_18%)]"></div>
               </div>
               {/* 사진 넣는 곳 */}
+              <input
+                type="file"
+                accept="image/jpg,impge/png,image/jpeg"
+                name="ticket_image"
+                onChange={uploadImage}
+                className="invisible w-0"
+                id="ticket_image"
+              />
               <div className="flex h-full w-[calc(100%*4.2/15.2)] cursor-pointer items-center justify-center">
-                <input
-                  type="file"
-                  accept="image/jpg,impge/png,image/jpeg"
-                  name="ticket_image"
-                  onChange={uploadImage}
-                  className="invisible w-0"
-                  id="ticket_image"
-                />
                 {selectedImage !== "" ? (
-                  <img
-                    src={selectedImage}
-                    alt="티켓 사진"
-                    className="h-full object-cover"
-                  />
+                  <div
+                    className="h-full w-full"
+                    style={{
+                      backgroundImage: `url(${selectedImage})`,
+                      backgroundSize: "cover",
+                      backgroundPosition: "center center",
+                      backgroundRepeat: "no-repeat",
+                    }}
+                  ></div>
                 ) : (
                   <button>
                     <label htmlFor="ticket_image" className="cursor-pointer">
